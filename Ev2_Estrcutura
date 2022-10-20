@@ -1,5 +1,5 @@
 import datetime
-import time
+
 
 Separador = ("_" * 60) + "\n"
 Salas= {}
@@ -93,16 +93,16 @@ while True:
                   print("El cliente no existe\n")                
                 
             if opcion2 == "a2":
-                clave = int(input("Ingresa la clave de la reservación: \n"))
+                Clave = int(input("Ingresa la clave de la reservación: \n"))
 
-                if clave in Reservas.keys():
-                  nombre_nuevo = input("Ingresa nuevo nombre del evento: \n")
+                if Clave in Reservas.keys():
+                  Nombre_nuevo = input("Ingresa nuevo nombre del evento: \n")
 
-                  for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
-                    if clave == clave_registrada:
-                      Reservas.update({clave_registrada: [sala, fecha, cliente, nombre_nuevo, turno_reservacion]})
+                  for Clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
+                    if Clave == clave_registrada:
+                      Reservas.update({clave_registrada: [sala, fecha, cliente, Nombre_nuevo, turno_reservacion]})
 
-                      print(f"El nuevo nombre del evento es: {nombre_nuevo}\n")
+                      print(f"El nuevo nombre del evento es: {Nombre_nuevo}\n")
 
                 else:
                   print("Ingresa una clave de reservación válida\n")
@@ -117,7 +117,7 @@ while True:
                     Salas_libres.append((sala,turno))
                     Combicacion_posible =set(Salas_libres)
                     Salas_libres =sorted(list(Combicacion_posible - convertidor))
-                    print(Salas_libres) 
+                    print(Salas_libres)  
             
             if opcion2=="a4":
               print("Saliendo del menu de reservas...")
@@ -136,7 +136,7 @@ while True:
                     fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
 
                     print(Separador)
-                    print("*" + " "*13 + f"REPORTE: {fecha_solicitada}" + " "*13 + "*")
+                    print("*" + " "*13 + f"REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}" + " "*13 + "*")
                     print("")
                     print("{:<6} {:<20} {:<38} {:<13}".format('SALA','CLIENTE','EVENTO', 'TURNO'))
                     print(Separador)
@@ -144,7 +144,7 @@ while True:
                     for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
                       if fecha_modificada == fecha:
                         print("{:<6} {:<20} {:<38} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
-                    print(Separador)
+                    print(f"{Separador} FIN DEL REPORTE {Separador}")
         
             elif opcion2 == "B2":
                 
@@ -217,4 +217,5 @@ while True:
 
     else:
         print("Ingrese una respuesta válida: \n")
+        
         
