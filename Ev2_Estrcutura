@@ -1,22 +1,22 @@
 import datetime
 import time
 
-import openpyxl
-from openpyxl import Workbook
-from openpyxl.styles import Font
-from openpyxl.styles.alignment import Alignment
-
-exportacion= openpyxl.Workbook()
-exportacion.iso_dates = True
-hoja = exportacion.active
-hoja.title = 'Reservaciones'
-
 Separador = ("_" * 60) + "\n"
 Salas= {}
 Reservas = {}
 Clientes= {}
 Fecha_capturada = ""
 Salas_libres = {}
+
+from openpyxl import Workbook
+import openpyxl
+from openpyxl.styles import Font
+from openpyxl.styles.alignment import Alignment
+
+exportar= openpyxl.Workbook()
+exportar.iso_dates = True
+hoja = exportar.active
+hoja.title = 'Reservaciones'
 
 while True:
     print(Separador)
@@ -118,7 +118,19 @@ while True:
                     Combicacion_posible =set(Salas_libres)
                     Salas_libres =sorted(list(Combicacion_posible - convertidor))
                     print(Salas_libres)  
+                    
+                # print(Separador)
+                # print("*" + " "*13 + f"REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}" + " "*13 + "*")
+                # print(Separador)
 
+                # print("{:<6} {:<20} {:<38} {:<13}".format('SALA','CLIENTE','EVENTO', 'TURNO'))
+                # print("*"*77)
+
+                # for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in reservaciones.items():
+                #   if fecha_modificada == fecha:
+                #     print("{:<6} {:<20} {:<38} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
+                #     print(""*30 + " FIN DEL REPORTE " + ""*30)
+            
             if opcion2=="a4":
               print("Saliendo del menu de reservas...")
               break        
@@ -136,7 +148,7 @@ while True:
                     fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
 
                     print(Separador)
-                    print(f" {Separador}  " + f"Reporte de los dias libres de {fecha_solicitada}" +  {Separador} )
+                    print("*" + " "*13 + f"REPORTE: {fecha_solicitada}" + " "*13 + "*")
                     print("")
                     print("{:<6} {:<20} {:<38} {:<13}".format('SALA','CLIENTE','EVENTO', 'TURNO'))
                     print(Separador)
@@ -144,19 +156,23 @@ while True:
                     for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
                       if fecha_modificada == fecha:
                         print("{:<6} {:<20} {:<38} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
-                    print(f"{Separador} FIN DEL REPORTE {Separador}")
+                    print(Separador)
+        
+            elif opcion2 == "B2":
+                
+                    print("Exportando reporte a Excel \n")
+                    print("... \n")
                     
                     hoja.merge_cells('A1:H1')
-                    hoja['A1']=f'REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}'
-                    hoja.sheet_properties.tabColor = 'A4C5DF'
-                    hoja['A1'].font = Font(bold=True, size = 14)
+                    hoja['A1']=f'REPORTE DE RESERVACIONES DEL DÍA {fecha_solicitada}'
+                    hoja['A1'].font = Font(bold=True, size = 16)
+                    hoja.sheet_properties.tabColor = 'dfdb6d'
                     hoja['A1'].alignment = Alignment (horizontal ='center')
 
                     hoja.merge_cells('A2:B2')
                     hoja.merge_cells('C2:D2')
                     hoja.merge_cells('E2:F2')
                     hoja.merge_cells('G2:H2')
-
                     hoja['A2']= 'SALA'
                     hoja['A2'].alignment = Alignment (horizontal='center')
                     hoja['C2']= 'CLIENTE'
@@ -165,7 +181,6 @@ while True:
                     hoja['E2'].alignment = Alignment (horizontal='center')
                     hoja['G2']= 'TURNO'
                     hoja['G2'].alignment = Alignment (horizontal='center')
-#----------------------
                     hoja.merge_cells('A3:B3')
                     hoja.merge_cells('C3:D3')
                     hoja.merge_cells('E3:F3')
@@ -184,11 +199,8 @@ while True:
                     hoja['G3'].alignment = Alignment (horizontal='center')
 
 
-                    exportacion.save('EjExc.xlsx')
-        
-            elif opcion2 == "B2":
-                    print("Exportando reporte a Excel \n")
-                    print("... \n")
+                    exportar.save('Ev2_Reporte.xlsx')
+                    
                     print("Reporte exportado con éxito \n")
                     
             else:
