@@ -117,19 +117,7 @@ while True:
                     Salas_libres.append((sala,turno))
                     Combicacion_posible =set(Salas_libres)
                     Salas_libres =sorted(list(Combicacion_posible - convertidor))
-                    print(Salas_libres)  
-                    
-                # print(Separador)
-                # print("*" + " "*13 + f"REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}" + " "*13 + "*")
-                # print(Separador)
-
-                # print("{:<6} {:<20} {:<38} {:<13}".format('SALA','CLIENTE','EVENTO', 'TURNO'))
-                # print("*"*77)
-
-                # for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in reservaciones.items():
-                #   if fecha_modificada == fecha:
-                #     print("{:<6} {:<20} {:<38} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
-                #     print(""*30 + " FIN DEL REPORTE " + ""*30)
+                    print(Salas_libres) 
             
             if opcion2=="a4":
               print("Saliendo del menu de reservas...")
