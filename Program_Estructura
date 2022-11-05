@@ -162,15 +162,16 @@ try:
                     fecha_solicitada = input("Ingresa la fecha del evento (dd/mm/aaaa): \n")
                   except ValueError:
                     print("Ingrese la fecha correcta")
-                    break
-
+                    break  
                 fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
                 convertidor = set(Reservas)
-
-                consulta = set(mi_cursor.execute("SELECT FROM Reserva (clave_s,turno)"))
-                Salas_libres.append((clave_sala,turno_reservacion))
-                Combinacion_posible = set(Salas_libres)
-                Sala_disponible = sorted(list(Combinacion_posible-consulta)) 
+                
+                for sala in Salas.keys():
+                  for turno in Reservas.values(): 
+                    Salas_libres.append((sala,turno))
+                    Combicacion_posible =set(Salas_libres)
+                    Salas_libres =sorted(list(Combicacion_posible - convertidor))
+                    print(Salas_libres)  
 
           elif opcion2=="a4":
               print(Reservas)
@@ -217,17 +218,19 @@ try:
             print(Separador)
             opcion2 = input("Ingrese la opción:  \n").lower()
             if opcion2 == "b1":
+  
+              print(Separador)
+              while True:
+                try:
+                  fecha_solicitada = input("Ingrese la fecha del evento (dd/mm/aaaa): \n")
+                  fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
+                except ValueError:
+                    print("Ingrese una fecha valida")
+                break
                 
-                print(Separador)
-                while True:
-                    try:
-                        fecha_solicitada = input("Ingrese la fecha del evento (dd/mm/aaaa): \n")
-                    except ValueError:
-                        print("Ingrese una fecha valida")
-                    break
-
-                fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
-
+              if fecha_solicitada == "":
+                break
+              else:
                 print(Separador)
                 print(f"-"*10 + f"Reporte de los dias libres de {fecha_solicitada}" + "-"*10 )
                 print("")
@@ -241,49 +244,52 @@ try:
                     
         
             elif opcion2 == "b2":
-              print(Separador)
-              print("Exportando reporte a Excel \n")
-              print(Separador)
-              hoja.merge_cells('A1:H1')
-              hoja['A1']=f'REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}'
-              hoja.sheet_properties.tabColor = 'A4C5DF'
-              hoja['A1'].font = Font(bold=True, size = 14)
-              hoja['A1'].alignment = Alignment (horizontal ='center')
+              if Reservas == "":
+                print("No hay reservas que expotar")
+              else:  
+                print(Separador)
+                print("Exportando reporte a Excel \n")
+                print(Separador)
+                hoja.merge_cells('A1:H1')
+                hoja['A1']=f'REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}'
+                hoja.sheet_properties.tabColor = 'A4C5DF'
+                hoja['A1'].font = Font(bold=True, size = 14)
+                hoja['A1'].alignment = Alignment (horizontal ='center')
 
-              hoja.merge_cells('A2:B2')
-              hoja.merge_cells('C2:D2')
-              hoja.merge_cells('E2:F2')
-              hoja.merge_cells('G2:H2')
+                hoja.merge_cells('A2:B2')
+                hoja.merge_cells('C2:D2')
+                hoja.merge_cells('E2:F2')
+                hoja.merge_cells('G2:H2')
 
-              hoja['A2']= 'SALA'
-              hoja['A2'].alignment = Alignment (horizontal='center')
-              hoja['C2']= 'CLIENTE'
-              hoja['c2'].alignment = Alignment (horizontal='center')
-              hoja['E2']= 'EVENTO'
-              hoja['E2'].alignment = Alignment (horizontal='center')
-              hoja['G2']= 'TURNO'
-              hoja['G2'].alignment = Alignment (horizontal='center')
+                hoja['A2']= 'SALA'
+                hoja['A2'].alignment = Alignment (horizontal='center')
+                hoja['C2']= 'CLIENTE'
+                hoja['c2'].alignment = Alignment (horizontal='center')
+                hoja['E2']= 'EVENTO'
+                hoja['E2'].alignment = Alignment (horizontal='center')
+                hoja['G2']= 'TURNO'
+                hoja['G2'].alignment = Alignment (horizontal='center')
 #------
-              hoja.merge_cells('A3:B3')
-              hoja.merge_cells('C3:D3')
-              hoja.merge_cells('E3:F3')
-              hoja.merge_cells('G3:H3')
+                hoja.merge_cells('A3:B3')
+                hoja.merge_cells('C3:D3')
+                hoja.merge_cells('E3:F3')
+                hoja.merge_cells('G3:H3')
 
-              hoja['A3'].value = clave_sala
-              hoja['A3'].alignment = Alignment (horizontal='center')
+                hoja['A3'].value = clave_sala
+                hoja['A3'].alignment = Alignment (horizontal='center')
 
-              hoja['C3'].value = nombre_cliente
-              hoja['C3'].alignment = Alignment (horizontal='center')
+                hoja['C3'].value = nombre_cliente
+                hoja['C3'].alignment = Alignment (horizontal='center')
 
-              hoja['E3'].value = nombre_reservacion
-              hoja['E3'].alignment = Alignment (horizontal='center')
+                hoja['E3'].value = nombre_reservacion
+                hoja['E3'].alignment = Alignment (horizontal='center')
 
-              hoja['G3'].value = turno_reservacion
-              hoja['G3'].alignment = Alignment (horizontal='center')
+                hoja['G3'].value = turno_reservacion
+                hoja['G3'].alignment = Alignment (horizontal='center')
 
-              exportacion.save('EjExc.xlsx')
+                exportacion.save('EjExc.xlsx')
               
-              print("Reporte exportado con éxito \n")
+                print("Reporte exportado con éxito \n")
 
             elif opcion2 =="b3":
               break        
