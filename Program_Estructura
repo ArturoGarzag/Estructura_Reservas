@@ -64,14 +64,13 @@ try:
             print(Clientes)
             print(Separador)
             
-            while True:
-              try:
-                Clave_cliente = int(input("Ingresa la clave de cliente: \n"))
+            
+            try:
+              Clave_cliente = int(input("Ingresa la clave de cliente: \n"))
+            except ValueError:
+              print("Necesitamos una clave de cliente ")
+              continue
                 
-              except ValueError:
-                print("Ingrese la clave")
-                continue
-              break  
 
             ID_clientes = [clave for clave in Clientes.keys()]
 
@@ -140,6 +139,7 @@ try:
                 try:
                   clave = int(input("Ingresa la clave de la reservación: \n"))
                 except ValueError:
+                  print("Necesitamos una clave de reservacion")
                   continue
 
                 if clave in Reservas.keys():
@@ -157,13 +157,14 @@ try:
             
           elif opcion2 == "a3":
                 print(Separador)
-                while True:
-                  try:
-                    fecha_solicitada = input("Ingresa la fecha del evento (dd/mm/aaaa): \n")
-                  except ValueError:
-                    print("Ingrese la fecha correcta")
-                    break  
-                fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
+                
+                try:
+                  fecha_solicitada = input("Ingresa la fecha del evento (dd/mm/aaaa): \n")
+                  fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
+                except ValueError:
+                  print("Ingrese la fecha correcta")
+                  continue  
+                
                 convertidor = set(Reservas)
                 
                 for sala in Salas.keys():
@@ -175,12 +176,12 @@ try:
 
           elif opcion2=="a4":
               print(Reservas)
-              while True:
-                try:
-                  clave_reservacion = int(input("Ingresa la clave de la reservación: \n"))
-                except ValueError:
-                  print("Necesitamos la clave de la reservacion")
-                  break
+              
+              try:
+                clave_reservacion = int(input("Ingresa la clave de la reservación: \n"))
+              except ValueError:
+                print("Necesitamos la clave de la reservacion")
+                continue
 
               Folio_Reserva = [folio for folio in Reservas.keys()]
 
@@ -220,12 +221,12 @@ try:
             if opcion2 == "b1":
   
               print(Separador)
-              while True:
-                try:
-                  fecha_solicitada = input("Ingrese la fecha del evento (dd/mm/aaaa): \n")
-                  fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
-                except ValueError:
-                    print("Ingrese una fecha valida")
+              
+              try:
+                fecha_solicitada = input("Ingrese la fecha del evento (dd/mm/aaaa): \n")
+                fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
+              except ValueError:
+                print("Ingrese una fecha valida")
                 break
                 
               if fecha_solicitada == "":
