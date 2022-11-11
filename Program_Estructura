@@ -1,8 +1,8 @@
+
 import datetime
 import sys
 import sqlite3
 from sqlite3 import Error
-import os
 
 import openpyxl
 from openpyxl import Workbook
@@ -33,7 +33,7 @@ try:
     Reservas = {}
     Clientes= {}
     Fecha_capturada = ""
-    Salas_libres = {}
+
 
     while True:
       print(Separador)
@@ -61,7 +61,7 @@ try:
           opcion2 = input("Ingrese la opción:  \n").lower()
           if opcion2 == "a1":
             print(Separador)
-            print(Clientes)
+            print(cliente)
             print(Separador)
             
             
@@ -71,7 +71,7 @@ try:
               print("Necesitamos una clave de cliente ")
               continue
                 
-
+            
             ID_clientes = [clave for clave in Clientes.keys()]
 
             if Clave_cliente in ID_clientes:
@@ -149,6 +149,8 @@ try:
                   for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
                     if clave == clave_registrada:
                       Reservas.update({clave_registrada: [sala, fecha, cliente, nombre_nuevo, turno_reservacion]})
+                      Valor_nuevar ={"Nombre_nuevo":nombre_nuevo, "Nombre":nombre_reservacion, "Clave":clave}
+                      mi_cursor.execute("UPDATE Reserva SET :Nombre_nuevo  where Nombre = Clave ",Valor_nuevar)
 
                       print(f"El nuevo nombre del evento es: {nombre_nuevo}\n")
 
@@ -186,22 +188,22 @@ try:
               Folio_Reserva = [folio for folio in Reservas.keys()]
 
               if clave_reservacion in Folio_Reserva:
-                fecha_actual = datetime.date.today()
-                fecha_valida = fecha_reservacion - datetime.timedelta(days = 3)
+                  fecha_actual = datetime.date.today()
+                  fecha_valida = fecha_reservacion - datetime.timedelta(days = 3)
 
-                if fecha_actual <= fecha_valida:
-                  Valor_eliminar ={f"Eliminar":clave_reservacion}
-                  print("Datos de la reservación \n")
-                  print(Reservas)
+              if fecha_actual <= fecha_valida:
+                Valor_eliminar ={f"Eliminar":clave_reservacion}
+                print("Datos de la reservación \n")
+                print(Reservas)
                     
-                  print("Si usted desea eliminar una reservación, hemos de recordarle que esta acción no puede ser deshecha, favor de revisar los datos y confirmar si desea eliminarla. \n")
-                  opeliminar = input("Seleccione S para eliminar \n").lower()
+                print("Si usted desea eliminar una reservación, hemos de recordarle que esta acción no puede ser deshecha, favor de revisar los datos y confirmar si desea eliminarla. \n")
+                opeliminar = input("Seleccione S para eliminar \n").lower()
                   
-                  if opeliminar.upper() == 'S':
-                    mi_cursor.execute("DELETE FROM Reserva WHERE clave_r =:Eliminar",Valor_eliminar)
-                    print("Eliminacion con exito")
-                  else:
-                    break   
+                if opeliminar.upper() == 'S':
+                  mi_cursor.execute("DELETE FROM Reserva WHERE clave_r =:Eliminar",Valor_eliminar)
+                  print("Eliminacion con exito")
+                else:
+                  break   
 
           elif opcion2 =="a5":
             print("Saliendo del menu reservaciones")
@@ -288,13 +290,12 @@ try:
                 hoja['G3'].value = turno_reservacion
                 hoja['G3'].alignment = Alignment (horizontal='center')
 
-                exportacion.save('EjExc.xlsx')
+                exportacion.save('Reservaciones.xlsx')
               
                 print("Reporte exportado con éxito \n")
 
             elif opcion2 =="b3":
               break        
-
             else:
                     print("Ingrese una respuesta válida \n")
             
@@ -305,23 +306,27 @@ try:
         if nombre_sala == "":
           print("Necesitamos el nombre para la sala")
           continue
+        for nombre_sala in Salas.values():
+          print("Este nombre de sala ya esta guardado")
+          break
+        else:
+          print("")
+          try:
+            capacidad=int(input("Ingrese la capacidad de la sala: \n"))
+          except ValueError:
+            print("Necesitamos la capacidad de la sala")
+            continue
+
+          clave_sala = max(list(Salas.keys()), default = 0) + 1
+
+          Salas[clave_sala] = [nombre_sala,capacidad]
+
+          Valor_sala = {f"Clave":clave_sala,"Nombre":nombre_sala,"Capacidad":capacidad}
+
+          print(Separador)
+          print(f"Sala registrada, clave de nueva sala: {clave_sala}\n")
+          mi_cursor.execute("INSERT INTO Sala VALUES(:Clave,:Nombre,:Capacidad)",Valor_sala)
         
-        try:
-          capacidad=int(input("Ingrese la capacidad de la sala: \n"))
-        except ValueError:
-          print("Necesitamos la capacidad de la sala")
-          continue
-
-        clave_sala = max(list(Salas.keys()), default = 0) + 1
-
-        Salas[clave_sala] = [nombre_sala,capacidad]
-
-        Valor_sala = {f"Clave":clave_sala,"Nombre":nombre_sala,"Capacidad":capacidad}
-
-        print(Separador)
-        print(f"Sala registrada, clave de nueva sala: {clave_sala}\n")
-        mi_cursor.execute("INSERT INTO Sala VALUES(:Clave,:Nombre,:Capacidad)",Valor_sala)
-    
       elif opcion.upper() == "D":
         print(Separador)
       
@@ -341,7 +346,6 @@ try:
         print(f"Cliente registrado, clave de nuevo cliente: {clave_cliente}\n")
         mi_cursor.execute("INSERT INTO Cliente VALUES(:Clave,:Nombre)",Valor_cliente)
         
-
       elif opcion.upper() == "E":
         break
   
