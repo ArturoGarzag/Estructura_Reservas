@@ -116,7 +116,7 @@ try:
                             nombre_cliente = nombre
                         
                         Reservas[clave_reservacion] = [clave_sala, fecha_reservacion, nombre_cliente, nombre_reservacion, turno]
-                        print("hh")
+
                         Valor_reserva = {"Clave":clave_reservacion,"Nombre":nombre_reservacion,"Fecha":fecha_reservacion,"Turno":turno,"Clavesala":clave_sala,"Clavecliente":Clave_cliente}
                         mi_cursor.execute("INSERT INTO Reserva VALUES(:Clave,:Nombre,:Fecha,:Turno,:Clavesala,:Clavecliente)",Valor_reserva)
 
@@ -220,28 +220,20 @@ try:
   
               print(Separador)
               
-              try:
-                fecha_solicitada = input("Ingrese la fecha del evento (dd/mm/aaaa): \n")
-                fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
-              except ValueError:
-                print("Ingrese una fecha valida")
-                break
-                
-              if fecha_solicitada == "":
-                break
-              else:
-                print(Separador)
-                print(f"-"*10 + f"Reporte de los dias libres de {fecha_solicitada}" + "-"*10 )
-                print("")
-                print("{:<6} {:<20} {:<38} {:<13}".format('SALA','CLIENTE','EVENTO', 'TURNO'))
-                print(Separador)
+              fecha_solicitada = input("Ingrese la fecha del evento (dd/mm/aaaa): \n")
+              fecha_modificada = datetime.datetime.strptime(Fecha_capturada, "%d/%m/%Y").date()
 
-                for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
-                    if fecha_modificada == fecha:
-                        print("{:<6} {:<20} {:<20} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
-                    print(f"FIN DEL REPORTE")
+              print(Separador)
+              print("-"*13 + f"REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}" +"-"*13)
+              print("")
+              print("{:<10} {:<20} {:<20} {:<13}".format('SALA','CLIENTE','EVENTO', 'TURNO'))
+              print(Separador)
+
+              for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
+                if fecha_modificada == fecha:
+                  print("{:<10} {:<20} {:<20} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
+              print("-"*30 + " FIN DEL REPORTE " + "-"*30)
                     
-        
             elif opcion2 == "b2":
               if Reservas == "":
                 print("No hay reservas que expotar")
@@ -302,9 +294,6 @@ try:
         if nombre_sala == "":
           print("Necesitamos el nombre para la sala")
           continue
-        for nombre_sala in Salas.values():
-          print("Este nombre de sala ya esta guardado")
-          break
         else:
           print("")
           try:
