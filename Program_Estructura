@@ -1,8 +1,9 @@
 
 import datetime
-import os
 import sqlite3
 from sqlite3 import Error
+import os
+import sys
 
 import openpyxl
 from openpyxl import Workbook
@@ -61,9 +62,8 @@ try:
           opcion2 = input("Ingrese la opción:  \n").lower()
           if opcion2 == "a1":
             print(Separador)
-            print(cliente)
+            print(Clientes)
             print(Separador)
-            
             
             try:
               Clave_cliente = int(input("Ingresa la clave de cliente: \n"))
@@ -91,7 +91,7 @@ try:
 
                 if clave_sala in clave_salas:
                     print(Separador)
-                    turno = input("(M)atutino \n (V)espertino \n (N)octurno \n Ingresa la letra inicial del turno:\n")
+                    turno = input("\n (M)atutino \n (V)espertino \n (N)octurno \n Ingresa la letra inicial del turno:\n")
 
                     if turno.upper() == 'M':
                       turno = 'Matituno'
@@ -149,11 +149,7 @@ try:
                   for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
                     if clave == clave_registrada:
                       Reservas.update({clave_registrada: [sala, fecha, cliente, nombre_nuevo, turno_reservacion]})
-                      Valor_nuevar ={"Nombre_nuevo":nombre_nuevo, "Nombre":nombre_reservacion, "Clave":clave}
-                      mi_cursor.execute("UPDATE Reserva SET :Nombre_nuevo  where Nombre = Clave ",Valor_nuevar)
-
                       print(f"El nuevo nombre del evento es: {nombre_nuevo}\n")
-
                 else:
                   print("Ingresa una clave de reservación válida\n")
             
@@ -242,8 +238,8 @@ try:
 
                 for clave_registrada, [sala, fecha, cliente, nombre, turno_reservacion] in Reservas.items():
                     if fecha_modificada == fecha:
-                        print("{:<6} {:<20} {:<38} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
-                    print(f"{Separador} FIN DEL REPORTE {Separador}")
+                        print("{:<6} {:<20} {:<20} {:<13}".format(sala, cliente, nombre, turno_reservacion))        
+                    print(f"FIN DEL REPORTE")
                     
         
             elif opcion2 == "b2":
@@ -254,8 +250,8 @@ try:
                 print("Exportando reporte a Excel \n")
                 print(Separador)
                 hoja.merge_cells('A1:H1')
-                hoja['A1']=f'REPORTE DE RESERVACIONES PARA EL DÍA {fecha_solicitada}'
-                hoja.sheet_properties.tabColor = 'A4C5DF'
+                hoja['A1']=f'Reporte de reservaciones del dia {fecha_solicitada}'
+                hoja.sheet_properties.tabColor = '23FFAF'
                 hoja['A1'].font = Font(bold=True, size = 14)
                 hoja['A1'].alignment = Alignment (horizontal ='center')
 
